@@ -1,30 +1,136 @@
-/* app css stylesheet */
+html, body, #mainAppContainer {height: 100%;}
+body {overflow: hidden; background: rgb(240,247,255); font-size: 0.8em; font-family: Consolas, "Lucida Console", monospace;}
+ol, ul {margin: 0; padding: 0; list-style: none;}
 
-.menu {
-  list-style: none;
-  border-bottom: 0.1em solid black;
-  margin-bottom: 2em;
-  padding: 0 0 0.5em;
+
+/* Flexible CSS layout module */
+#mainAppContainer {
+    display: -webkit-flex; display: -moz-flex; display: -ms-flex; /* new */
+    display: -moz-box; display: -ms-flexbox; /* old */
+    display: flex;
+    
+    -webkit-flex-direction: column; -moz-flex-direction: column; -ms-flex-direction: column; /* new */
+    -moz-box-orient: vertical; -ms-box-orient: vertical; /* old */
+    flex-direction: column;
 }
 
-.menu:before {
-  content: "[";
+#mainAppContainerTop {
+    -webkit-flex: 1; -moz-flex: 1; -ms-flex: 1; /* new */
+    -moz-box-flex: 1; -ms-box-flex: 1; /* old */
+    flex: 1;
+
+    display: -webkit-flex; display: -moz-flex; display: -ms-flex; /* new */
+    display: -moz-box; display: -ms-flexbox; /* old */
+    display: flex;
+    
+    -webkit-flex-direction: row; -moz-flex-direction: row; -ms-flex-direction: row; /* new */
+    -moz-box-orient: horizontal; -ms-box-orient: horizontal; /* old */
+    flex-direction: row;
+
+    height: 1px;
 }
 
-.menu:after {
-  content: "]";
+#mainAppContainerBottom {
+    border-top: 1px solid rgb(200,209,219);
 }
 
-.menu > li {
-  display: inline;
+
+/* Main app window */
+#messagesWindow,
+#usersWindow {overflow-x: hidden; overflow-y: auto;}
+
+#messagesWindow {width: 80%; border-right: 1px solid rgb(200,209,219);}
+
+#newMessageForm input {box-sizing: border-box; width: 100%;}
+
+
+/* Login window */
+#loginWindowContainer {
+    visibility: hidden;
+    position: absolute; top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(33,33,33,0.5);
 }
 
-.menu > li:before {
-  content: "|";
-  padding-right: 0.3em;
+#loginWindowContainer.hidden {
+    visibility: visible;
 }
 
-.menu > li:nth-child(1):before {
-  content: "";
-  padding: 0;
+#loginWindowContainer.visible {
+    visibility: visible;
+}
+
+#loginWindow {
+    position: absolute; top: 50%; left: 50%;
+    width: 300px; height: 170px;
+    margin-top: -100px; margin-left: -175px;
+    padding: 15px 25px;
+    background: white;
+    box-shadow: 0 0 20px #333;
+    border-radius: 1px;
+}
+
+#loginWindow h1 {text-align: center; font-size: x-large;}
+#nickname {box-sizing: border-box; width: 100%;}
+#loginWindow input[type="submit"] {display: block; width: 100px; margin: 15px auto 0;}
+
+/* Animations */
+#loginWindowContainer.visible #loginWindow {
+    -webkit-animation-name: revealLoginWindow;
+    -webkit-animation-iteration-count: 1;
+    -webkit-animation-duration: 1.2s;
+    -webkit-animation-timing-function: linear;
+    -webkit-animation-fill-mode: forwards;
+
+    -moz-animation-name: revealLoginWindow;
+    -moz-animation-iteration-count: 1;
+    -moz-animation-duration: 1.2s;
+    -moz-animation-timing-function: linear;
+    -moz-animation-fill-mode: forwards;
+
+    -ms-animation-name: revealLoginWindow;
+    -ms-animation-iteration-count: 1;
+    -ms-animation-duration: 1.2s;
+    -ms-animation-timing-function: linear;
+    -ms-animation-fill-mode: forwards;
+}
+
+#loginWindowContainer.hidden #loginWindow {
+    -webkit-animation-name: hideLoginWindow;
+    -webkit-animation-iteration-count: 1;
+    -webkit-animation-duration: 0.3s;
+    -webkit-animation-timing-function: linear;
+    -webkit-animation-fill-mode: forwards;
+
+    -moz-animation-name: hideLoginWindow;
+    -moz-animation-iteration-count: 1;
+    -moz-animation-duration: 0.3s;
+    -moz-animation-timing-function: linear;
+    -moz-animation-fill-mode: forwards;
+
+    -ms-animation-name: hideLoginWindow;
+    -ms-animation-iteration-count: 1;
+    -ms-animation-duration: 0.3s;
+    -ms-animation-timing-function: linear;
+    -ms-animation-fill-mode: forwards;
+}
+
+#loginWindowContainer.hidden {
+    -webkit-animation-name: hideLoginWindowContainer;
+    -webkit-animation-iteration-count: 1;
+    -webkit-animation-duration: 0.3s;
+    -webkit-animation-timing-function: linear;
+    -webkit-animation-fill-mode: forwards;
+
+    -moz-animation-name: hideLoginWindowContainer;
+    -moz-animation-iteration-count: 1;
+    -moz-animation-duration: 0.3s;
+    -moz-animation-timing-function: linear;
+    -moz-animation-fill-mode: forwards;
+    
+    -ms-animation-name: hideLoginWindowContainer;
+    -ms-animation-iteration-count: 1;
+    -ms-animation-duration: 0.3s;
+    -ms-animation-timing-function: linear;
+    -ms-animation-fill-mode: forwards;
 }

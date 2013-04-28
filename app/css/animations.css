@@ -1,0 +1,50 @@
+/* Webkit */
+@-webkit-keyframes revealLoginWindow {
+	0% {-webkit-transform: scale(0)  rotate(0deg); top: 100%;}
+	25% {-webkit-transform: scale(0.25) rotate(360deg);}
+	50% {-webkit-transform: scale(0.50) rotate(720deg);}
+	75% {-webkit-transform: scale(0.75) rotate(1080deg); top: 35%;}
+	100% {-webkit-transform: scale(1) rotate(1440deg); top: 50%;}
+}
+
+@-webkit-keyframes hideLoginWindow {
+	to {-webkit-transform: scale(5);}
+}
+
+@-webkit-keyframes hideLoginWindowContainer {
+	to {opacity: 0; visibility: hidden;}
+}
+
+/* Firefox */
+@-moz-keyframes revealLoginWindow {
+	0% {-moz-transform: scale(0)  rotate(0deg); top: 100%;}
+	25% {-moz-transform: scale(0.25) rotate(360deg);}
+	50% {-moz-transform: scale(0.50) rotate(720deg);}
+	75% {-moz-transform: scale(0.75) rotate(1080deg); top: 35%;}
+	100% {-moz-transform: scale(1) rotate(1440deg); top: 50%;}
+}
+
+@-moz-keyframes hideLoginWindow {
+	to {-moz-transform: scale(5);}
+}
+
+@-moz-keyframes hideLoginWindowContainer {
+	to {opacity: 0; visibility: hidden;}
+}
+
+/* IE */
+@-ms-keyframes revealLoginWindow {
+	0% {-ms-transform: scale(0)  rotate(0deg); top: 100%;}
+	25% {-ms-transform: scale(0.25) rotate(360deg);}
+	50% {-ms-transform: scale(0.50) rotate(720deg);}
+	75% {-ms-transform: scale(0.75) rotate(1080deg); top: 35%;}
+	100% {-ms-transform: scale(1) rotate(1440deg); top: 50%;}
+}
+
+@-ms-keyframes hideLoginWindow {
+	to {-ms-transform: scale(5);}
+}
+
+@-ms-keyframes hideLoginWindowContainer {
+	to {opacity: 0; visibility: hidden;}
+}
