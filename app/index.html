@@ -11,20 +11,14 @@
 
     <div id="mainAppContainer">
         <div id="mainAppContainerTop">
-            <div id="messagesWindow">
-                <ol>
-                    <li ng-repeat="message in messages">
-                        <span>[{{message.time | date:'HH:mm'}}]</span>
-                        <span>&lt;{{message.sender}}&gt;</span>
-                        {{message.text}}
-                    </li>
-                </ol>
-            </div>
-            <div id="usersWindow">
-                <ul>
-                    <li ng-repeat="user in users">{{user.nickname}}</li>
-                </ul>
-            </div>
+
+            <messages>
+                <message ng-repeat="message in messages" time="{{message.time | date:'HH:mm'}}" sender="{{message.sender}}">{{message.text}}</message>
+            </messages>
+
+            <users>
+                <user ng-repeat="user in users" nickname="{{user.nickname}}" />
+            </users>
         </div>
         <div id="mainAppContainerBottom">
             <form id="newMessageForm" ng-submit="sendNewMessage()">

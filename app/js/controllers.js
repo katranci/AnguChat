@@ -8,18 +8,6 @@ angular.module('AnguChat.controllers', []).
 		$scope.users = [];
 		$scope.messages = [];
 
-		DOMCache.put('messagesWindow', document.getElementById('messagesWindow'));
-
-		angular.element($window).bind('resize', function() {
-			DOMCache.get('messagesWindow').scrollTop = DOMCache.get('messagesWindow').scrollHeight;
-		});
-
-		$scope.$watch('messages.length', function(newValue, oldValue) {
-			$scope.$evalAsync(function() {
-				DOMCache.get('messagesWindow').scrollTop = DOMCache.get('messagesWindow').scrollHeight;
-			});
-		});
-
 		socket.on('listAllUsers', function(users) {
 			$scope.users = users;
 		});
