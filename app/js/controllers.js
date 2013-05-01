@@ -3,7 +3,7 @@
 /* Controllers */
 
 angular.module('AnguChat.controllers', []).
-	controller('AnguChatCtrl', ['$scope', 'socket', '$timeout', '$window', 'DOMCache', function($scope, socket, $timeout, $window, DOMCache) {
+	controller('AnguChatCtrl', ['$scope', 'socket', function($scope, socket) {
 
 		$scope.users = [];
 		$scope.messages = [];
