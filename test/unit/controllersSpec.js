@@ -2,14 +2,15 @@
 
 function socketMock() {
 
-	this.clientListeningEvents = [];
+	this.clientListeningEvents = {};
+	this.clientEmittedData = {};
 
 	this.on = function(event, callback) {
 		this.clientListeningEvents[event] = callback;
 	}
 
 	this.emit = function(event, data) {
-		return;
+		this.clientEmittedData[event] = data;
 	}
 
 	this.listAllUsers = function(users) {
@@ -35,6 +36,10 @@ describe('controllers', function() {
 
 		var scope;
 		var socket;
+
+		beforeEach(function() {
+			delete localStorage.user;
+		});
 
 		beforeEach(module('AnguChat.controllers'));
 
@@ -93,6 +98,76 @@ describe('controllers', function() {
 			socket.userDisconnected(disconnectedUser);
 			expect(scope.loginWindowStatus).not.toBe('visible');
 		});
-	});
 
+		it('should show the login screen for new users', function() {
+			expect(scope.loginWindowStatus).toBe('visible');
+		});
+
+		describe('On login', function() {
+			
+			var nickname;
+
+			beforeEach(function() {
+				nickname = 'Jasmine';
+				scope.nickname = nickname;
+				scope.login();
+			});
+
+			it('should set the user model correct', function() {				
+				expect(scope.user.nickname).toBe(nickname);
+			});
+
+			it('should save the user to the localStorage', function() {
+				expect(localStorage.user).toBeDefined();
+				expect(JSON.parse(localStorage.user).nickname).toBe(nickname);
+			});
+
+			it('should create a welcome message', function() {
+				expect(scope.messages.length).toBe(1);
+				var lastMessage = scope.messages.pop();
+				expect(lastMessage.sender).toBe('bot');
+				expect(lastMessage.text).toBe('Welcome to AnguChat ' + nickname + '!');
+			});
+
+			it('should let the other users know', function() {
+				expect(socket.clientEmittedData.newUser).toBeDefined();
+				expect(socket.clientEmittedData.newUser.nickname).toBe(nickname);
+			});
+
+			it('should remove the login screen', function() {
+				expect(scope.loginWindowStatus).toBe('hidden');
+			});
+		});
+
+		describe('On returning user', function() {
+
+			var nickname;
+
+			beforeEach(function() {
+				nickname = 'Jasmine';
+				scope.nickname = nickname;
+				scope.login();
+			});
+
+			beforeEach(inject(function($controller) {
+				var ctrl = $controller('AnguChatCtrl', {$scope: scope, socket: socket});
+			}));
+
+			it('should set the user model from localStorage', function() {
+				expect(scope.user.nickname).toBe(nickname);
+			});
+
+			it('should let the other users know', function() {
+				expect(socket.clientEmittedData.existingUser).toBeDefined();
+				expect(socket.clientEmittedData.existingUser.nickname).toBe(nickname);
+			});
+
+			it('should create a welcome back message', function() {
+				expect(scope.messages.length).toBe(1);
+				var lastMessage = scope.messages.pop();
+				expect(lastMessage.sender).toBe('bot');
+				expect(lastMessage.text).toBe('Welcome back ' + nickname + '!');
+			});
+		});
+	});
 });

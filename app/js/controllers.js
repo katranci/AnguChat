@@ -51,7 +51,6 @@ angular.module('AnguChat.controllers', []).
 			socket.emit('newUser', $scope.user);
 
 			$scope.loginWindowStatus = 'hidden';
-			document.getElementById('newMessage').focus();
 		}
 
 		if (localStorage.user) {
