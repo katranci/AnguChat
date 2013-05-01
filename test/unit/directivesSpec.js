@@ -1,19 +1,25 @@
 'use strict';
 
-/* jasmine specs for directives go here */
+xdescribe('directives', function() {
 
-describe('directives', function() {
-  beforeEach(module('myApp.directives'));
+    var $compile;
+    var $rootScope;
 
-  describe('app-version', function() {
-    it('should print current version', function() {
-      module(function($provide) {
-        $provide.value('version', 'TEST_VER');
-      });
-      inject(function($compile, $rootScope) {
-        var element = $compile('<span app-version></span>')($rootScope);
-        expect(element.text()).toEqual('TEST_VER');
-      });
+    // Load the application module which contains the directives
+    beforeEach(module('AnguChat.directives'));
+
+    // Store references to $rootScope and $compile
+    // so they are available to all tests in this describe block
+    beforeEach(inject(function(_$compile_, _$rootScope_) {
+        // The injector unwraps the underscores (_) from around the parameter names when matching
+        $compile = _$compile_;
+        $rootScope = _$rootScope_;
+    }));
+
+    it('Replaces the "messages" element with the appropriate content', function() {
+        // Compile a piece of HTML containing the directive
+        var element = $compile('<messages>content</messages>')($rootScope);
+        // Check that the compiled element contains the template content
+        expect(element.html()).toContain('<div id="messagesWindow">');
     });
-  });
 });
