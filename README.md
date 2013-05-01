@@ -12,4 +12,4 @@ To run the app during development:
 The flexible layout module is not working well on Firefox
 
 ## E2E testing
-http://localhost:8080/test/e2e/runner.html
+[http://localhost:8080/test/e2e/runner.html](http://localhost:8080/test/e2e/runner.html)
