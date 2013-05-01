@@ -1,45 +1,32 @@
 'use strict';
 
 /* http://docs.angularjs.org/guide/dev_guide.e2e-testing */
-
-describe('my app', function() {
-
-  beforeEach(function() {
-    browser().navigateTo('../../app/index.html');
-  });
-
-
-  it('should automatically redirect to /view1 when location hash/fragment is empty', function() {
-    expect(browser().location().url()).toBe("/view1");
-  });
-
-
-  describe('view1', function() {
+describe('AnguChat', function() {
+  
+  describe('New user', function() {
 
     beforeEach(function() {
-      browser().navigateTo('#/view1');
+      delete localStorage.user;
+      browser().navigateTo('../../app/index.html');
     });
 
-
-    it('should render view1 when user navigates to /view1', function() {
-      expect(element('[ng-view] p:first').text()).
-        toMatch(/partial for view 1/);
+    it('should see the login screen', function() {
+      expect(element('#loginWindowContainer').attr('class')).toBe('visible');
     });
 
-  });
-
-
-  describe('view2', function() {
-
-    beforeEach(function() {
-      browser().navigateTo('#/view2');
+    it('should\'t login with an empty nickname', function() {
+      input('nickname').enter('');
+      element('#loginForm :submit').click();
+      expect(element('#loginWindowContainer').attr('class')).not().toBe('hidden');
+      expect(element('#loginWindowContainer').attr('class')).toBe('visible');
     });
 
-
-    it('should render view2 when user navigates to /view2', function() {
-      expect(element('[ng-view] p:first').text()).
-        toMatch(/partial for view 2/);
+    it('should login in with a valid nickname', function() {
+      var nickname = 'Runner' + Date.now();
+      input('nickname').enter(nickname);
+      element('#loginForm :submit').click();
+      expect(element('#loginWindowContainer').attr('class')).toBe('hidden');
+      expect(repeater('#messagesWindow li').column('message.text')).toEqual(['Welcome to AnguChat ' + nickname + '!']);
     });
-
   });
 });
