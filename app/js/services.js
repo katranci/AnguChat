@@ -2,7 +2,9 @@
 
 angular.module('AnguChat.services', []).
 	factory('socket', ['$rootScope', function($rootScope) {
+
 		var socket = io.connect('http://localhost:8081');
+
 		return {
 			on: function(eventName, callback) {
 				socket.on(eventName, function() {
@@ -14,6 +16,7 @@ angular.module('AnguChat.services', []).
 			},
 			emit: function(eventName, data, callback) {
 				socket.emit(eventName, data, function() {
+					console.log(eventName);
 					var args = arguments;
 					$rootScope.$apply(function() {
 						if (callback) {
@@ -21,6 +24,14 @@ angular.module('AnguChat.services', []).
 						}
 					});
 				});
+			},
+			connect: function() {
+				if (!socket.socket.connected) {
+					socket.socket.reconnect();
+				}
+			},
+			disconnect: function() {
+				socket.disconnect();
 			}
 		}
 	}]).

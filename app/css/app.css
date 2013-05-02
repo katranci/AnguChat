@@ -44,6 +44,14 @@ ol, ul {margin: 0; padding: 0; list-style: none;}
 #newMessageForm input {box-sizing: border-box; width: 100%;}
 
 
+/* Users list */
+#usersWindow ul li .logout {
+    display: inline-block; vertical-align: top;
+    width: 16px; height: 16px;
+    margin-left: 2px;
+    background: url("../img/logout.png") no-repeat 0 0;
+}
+
 /* Login window */
 #loginWindowContainer {
     visibility: hidden;

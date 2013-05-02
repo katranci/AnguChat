@@ -1,35 +1,5 @@
 'use strict';
 
-function socketMock() {
-
-	this.clientListeningEvents = {};
-	this.clientEmittedData = {};
-
-	this.on = function(event, callback) {
-		this.clientListeningEvents[event] = callback;
-	}
-
-	this.emit = function(event, data) {
-		this.clientEmittedData[event] = data;
-	}
-
-	this.listAllUsers = function(users) {
-		this.clientListeningEvents['listAllUsers'](users);
-	}
-
-	this.displayNewUser = function(user) {
-		this.clientListeningEvents['displayNewUser'](user);
-	}
-
-	this.publishNewMessage = function(message) {
-		this.clientListeningEvents['publishNewMessage'](message);
-	}
-
-	this.userDisconnected = function(user) {
-		this.clientListeningEvents['userDisconnected'](user);
-	}
-}
-
 describe('controllers', function() {
 
 	describe('AnguChatCtrl', function() {
@@ -82,7 +52,7 @@ describe('controllers', function() {
 			var user = {id: Date.now(), nickname: 'Jasmine'};
 			var disconnectedUser = user;
 
-			scope.user = user;
+			scope.loggedInUser = user;
 
 			socket.userDisconnected(disconnectedUser);
 			expect(scope.loginWindowStatus).toBe('visible');
@@ -92,7 +62,7 @@ describe('controllers', function() {
 			var user = {id: Date.now(), nickname: 'Jasmine'};
 			var disconnectedUser = {id: Date.now()+1, nickname: 'Jasmine2'};
 
-			scope.user = user;
+			scope.loggedInUser = user;
 			scope.loginWindowStatus = 'hidden';
 
 			socket.userDisconnected(disconnectedUser);
@@ -114,7 +84,7 @@ describe('controllers', function() {
 			});
 
 			it('should set the user model correct', function() {				
-				expect(scope.user.nickname).toBe(nickname);
+				expect(scope.loggedInUser.nickname).toBe(nickname);
 			});
 
 			it('should save the user to the localStorage', function() {
@@ -154,7 +124,7 @@ describe('controllers', function() {
 			}));
 
 			it('should set the user model from localStorage', function() {
-				expect(scope.user.nickname).toBe(nickname);
+				expect(scope.loggedInUser.nickname).toBe(nickname);
 			});
 
 			it('should let the other users know', function() {
@@ -167,6 +137,10 @@ describe('controllers', function() {
 				var lastMessage = scope.messages.pop();
 				expect(lastMessage.sender).toBe('bot');
 				expect(lastMessage.text).toBe('Welcome back ' + nickname + '!');
+			});
+
+			xit('should be able to logout', function() {
+				// I should use confirm as a service...
 			});
 		});
 	});

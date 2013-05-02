@@ -29,4 +29,28 @@ describe('AnguChat', function() {
       expect(repeater('#messagesWindow li').column('message.text')).toEqual(['Welcome to AnguChat ' + nickname + '!']);
     });
   });
+
+  describe('User after successful login', function() {
+
+    beforeEach(function() {
+        delete localStorage.user;
+        browser().navigateTo('../../app/index.html');
+
+        var nickname = 'Runner' + Date.now();
+        input('nickname').enter(nickname);
+        element('#loginForm :submit').click();
+
+        sleep(1);
+    });
+
+    it('should see a logout button next to his name', function() {
+        expect(element('#usersWindow li[is-logged-in-user="true"] a.logout').count()).toBe(1);
+    });
+
+    xit('should be able to logout', function() {
+        element('#usersWindow li[is-logged-in-user="true"] a.logout').click();
+        // How can I interact with the confirm dialog here?
+        // Maybe I should create a confirm service so that I can mock it here..
+    });
+  });
 });

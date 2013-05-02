@@ -70,17 +70,22 @@ angular.module('AnguChat.directives', []).
 
 		return directiveDefinitionObject;
 	}).
-	directive('user', function() {
+	directive('user', function($compile) {
 
 		var directiveDefinitionObject = {
 			require: '?users',
 			restrict: 'E',
 			transclude: false,
 			replace: true,
-			template: 
-				'<li>{{nickname}}</li>',
-			scope: {
-				nickname: '@nickname'
+			template:
+				'<li><span class="nickname">{{user.nickname}}</span></li>',
+			link: function(scope, element, attrs) {
+				attrs.$observe('isLoggedInUser', function(value) {
+					if (value == 'true') {
+						var logoutElement = $compile('<a ng-click="logout()" class="logout" title="Log out"></a>')(scope);
+						element.append(logoutElement);
+					}
+				});
 			}
 		}
 

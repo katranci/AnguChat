@@ -17,7 +17,7 @@
             </messages>
 
             <users>
-                <user ng-repeat="user in users" nickname="{{user.nickname}}" />
+                <user ng-repeat="user in users" nickname="{{user.nickname}}" color="" is-logged-in-user="{{user.id == loggedInUser.id}}" />
             </users>
         </div>
         <div id="mainAppContainerBottom">

@@ -21,7 +21,7 @@ angular.module('AnguChat.controllers', []).
 		});
 
 		socket.on('userDisconnected', function(user) {
-			if (user.id == $scope.user.id) {
+			if (user.id == $scope.loggedInUser.id) {
 				$scope.loginWindowStatus = 'visible';
 			}
 		});
@@ -29,7 +29,7 @@ angular.module('AnguChat.controllers', []).
 		$scope.sendNewMessage = function() {
 			var message = {
 				time: Date.now(),
-				sender: $scope.user.nickname,
+				sender: $scope.loggedInUser.nickname,
 				text: $scope.newMessage};
 
 			socket.emit('newMessage', message);
@@ -40,28 +40,48 @@ angular.module('AnguChat.controllers', []).
 
 		$scope.login = function() {
 
-			$scope.user = {id: Date.now(), nickname: $scope.nickname};
-			localStorage.user = JSON.stringify($scope.user);
+			socket.connect();
+			
+			$scope.loggedInUser = {id: Date.now(), nickname: $scope.nickname};
+			localStorage.user = JSON.stringify($scope.loggedInUser);
 			
 			$scope.messages.push({
 				time: Date.now(),
 				sender: 'bot',
-				text: 'Welcome to AnguChat ' + $scope.user.nickname + '!'});
+				text: 'Welcome to AnguChat ' + $scope.loggedInUser.nickname + '!'});
 
-			socket.emit('newUser', $scope.user);
+			socket.emit('newUser', $scope.loggedInUser);
 
 			$scope.loginWindowStatus = 'hidden';
 		}
 
-		if (localStorage.user) {
-			$scope.user = JSON.parse(localStorage.user);
+		$scope.logout = function() {
+			if (confirm('Are you sure you want to log out?')) {
 
-			socket.emit('existingUser', $scope.user);
+				var upToDateUsers = [];
+				angular.forEach($scope.users, function(user) {
+					if (user.id != $scope.loggedInUser.id) {
+						upToDateUsers.push(user);
+					}
+				});
+				$scope.users = upToDateUsers;
+
+				delete localStorage.user;
+				
+				socket.disconnect();
+				$scope.loginWindowStatus = 'visible';
+			}
+		}
+
+		if (localStorage.user) {
+			$scope.loggedInUser = JSON.parse(localStorage.user);
+
+			socket.emit('existingUser', $scope.loggedInUser);
 
 			$scope.messages.push({
 				time: Date.now(),
 				sender: 'bot',
-				text: 'Welcome back ' + $scope.user.nickname + '!'});
+				text: 'Welcome back ' + $scope.loggedInUser.nickname + '!'});
 		} else {
 			$scope.loginWindowStatus = 'visible';
 		}
