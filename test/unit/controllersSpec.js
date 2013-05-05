@@ -6,6 +6,7 @@ describe('controllers', function() {
 
 		var scope;
 		var socket;
+		var modalDialog;
 
 		beforeEach(function() {
 			delete localStorage.user;
@@ -16,7 +17,8 @@ describe('controllers', function() {
 		beforeEach(inject(function($rootScope, $controller) {
 			scope = $rootScope.$new();
 			socket = new socketMock();
-			var ctrl = $controller('AnguChatCtrl', {$scope: scope, socket: socket});
+			modalDialog = new modalDialogMock();
+			var ctrl = $controller('AnguChatCtrl', {$scope: scope, socket: socket, modalDialog: modalDialog});
 		}));
 
 		it('should create an empty list of users', function() {
@@ -120,7 +122,7 @@ describe('controllers', function() {
 			});
 
 			beforeEach(inject(function($controller) {
-				var ctrl = $controller('AnguChatCtrl', {$scope: scope, socket: socket});
+				var ctrl = $controller('AnguChatCtrl', {$scope: scope, socket: socket, modalDialog: modalDialog});
 			}));
 
 			it('should set the user model from localStorage', function() {
@@ -139,8 +141,20 @@ describe('controllers', function() {
 				expect(lastMessage.text).toBe('Welcome back ' + nickname + '!');
 			});
 
-			xit('should be able to logout', function() {
-				// I should use confirm as a service...
+			it('should be able to logout', function() {
+				modalDialog.confirmTrue();
+
+				scope.logout();
+				expect(localStorage.user).toBeUndefined();
+				expect(scope.loginWindowStatus).toBe('visible');
+			});
+
+			it('shouldn\'t be logged out if the user hit cancel', function() {
+				modalDialog.confirmFalse();
+
+				scope.logout();
+				expect(localStorage.user).toBeDefined();
+				expect(scope.loginWindowStatus).toBe('hidden');
 			});
 		});
 	});

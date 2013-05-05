@@ -3,7 +3,7 @@
 /* Controllers */
 
 angular.module('AnguChat.controllers', []).
-	controller('AnguChatCtrl', ['$scope', 'socket', function($scope, socket) {
+	controller('AnguChatCtrl', ['$scope', 'socket', 'modalDialog', function($scope, socket, modalDialog) {
 
 		$scope.users = [];
 		$scope.messages = [];
@@ -56,7 +56,7 @@ angular.module('AnguChat.controllers', []).
 		}
 
 		$scope.logout = function() {
-			if (confirm('Are you sure you want to log out?')) {
+			if (modalDialog.confirm('Are you sure you want to log out?')) {
 
 				var upToDateUsers = [];
 				angular.forEach($scope.users, function(user) {

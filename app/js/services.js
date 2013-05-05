@@ -37,4 +37,11 @@ angular.module('AnguChat.services', []).
 	}]).
 	factory('DOMCache', ['$cacheFactory', function($cacheFactory) {
 		return $cacheFactory('DOMCache', {});
+	}]).
+	factory('modalDialog', ['$window', function($window) {
+		return {
+			confirm: function(message) {
+				return $window.confirm(message);
+			}
+		}
 	}]);

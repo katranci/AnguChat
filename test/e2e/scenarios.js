@@ -50,7 +50,6 @@ describe('AnguChat', function() {
     xit('should be able to logout', function() {
         element('#usersWindow li[is-logged-in-user="true"] a.logout').click();
         // How can I interact with the confirm dialog here?
-        // Maybe I should create a confirm service so that I can mock it here..
     });
   });
 });
