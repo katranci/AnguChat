@@ -29,6 +29,14 @@ describe('controllers', function() {
 			expect(scope.messages.length).toBe(0);
 		});
 
+		it('should declare the loggedInUser model', function() {
+			expect(scope.loggedInUser).toBeUndefined();
+		});
+
+		it('should declare the isReturningUser model', function() {
+			expect(scope.isReturningUser).toBeUndefined();
+		});
+
 		it('should listen to "listAllUsers" event', function() {
 			var users = [{id: Date.now(), nickname: 'Jasmine'}];
 			socket.listAllUsers(users);
@@ -50,31 +58,6 @@ describe('controllers', function() {
 			expect(scope.messages.pop()).toEqual(message);
 		});
 
-		it('should show the login screen when the user disconnects', function() {
-			var user = {id: Date.now(), nickname: 'Jasmine'};
-			var disconnectedUser = user;
-
-			scope.loggedInUser = user;
-
-			socket.userDisconnected(disconnectedUser);
-			expect(scope.loginWindowStatus).toBe('visible');
-		});
-
-		it('shouldn\'t show the login screen when a user disconnects', function() {
-			var user = {id: Date.now(), nickname: 'Jasmine'};
-			var disconnectedUser = {id: Date.now()+1, nickname: 'Jasmine2'};
-
-			scope.loggedInUser = user;
-			scope.loginWindowStatus = 'hidden';
-
-			socket.userDisconnected(disconnectedUser);
-			expect(scope.loginWindowStatus).not.toBe('visible');
-		});
-
-		it('should show the login screen for new users', function() {
-			expect(scope.loginWindowStatus).toBe('visible');
-		});
-
 		describe('On login', function() {
 			
 			var nickname;
@@ -85,13 +68,17 @@ describe('controllers', function() {
 				scope.login();
 			});
 
-			it('should set the user model correct', function() {				
+			it('should set the loggedInUser model', function() {				
 				expect(scope.loggedInUser.nickname).toBe(nickname);
 			});
 
 			it('should save the user to the localStorage', function() {
 				expect(localStorage.user).toBeDefined();
 				expect(JSON.parse(localStorage.user).nickname).toBe(nickname);
+			});
+
+			it('should set isReturningUser model to false', function() {
+				expect(scope.isReturningUser).toBe(false);
 			});
 
 			it('should create a welcome message', function() {
@@ -104,10 +91,6 @@ describe('controllers', function() {
 			it('should let the other users know', function() {
 				expect(socket.clientEmittedData.newUser).toBeDefined();
 				expect(socket.clientEmittedData.newUser.nickname).toBe(nickname);
-			});
-
-			it('should remove the login screen', function() {
-				expect(scope.loginWindowStatus).toBe('hidden');
 			});
 		});
 
@@ -125,8 +108,12 @@ describe('controllers', function() {
 				var ctrl = $controller('AnguChatCtrl', {$scope: scope, socket: socket, modalDialog: modalDialog});
 			}));
 
-			it('should set the user model from localStorage', function() {
+			it('should set the loggedInUser model from localStorage', function() {
 				expect(scope.loggedInUser.nickname).toBe(nickname);
+			});
+
+			it('should set the isReturningUser to true', function() {
+				expect(scope.isReturningUser).toBe(true);
 			});
 
 			it('should let the other users know', function() {
@@ -146,7 +133,7 @@ describe('controllers', function() {
 
 				scope.logout();
 				expect(localStorage.user).toBeUndefined();
-				expect(scope.loginWindowStatus).toBe('visible');
+				expect(scope.loggedInUser).toBeUndefined();
 			});
 
 			it('shouldn\'t be logged out if the user hit cancel', function() {
@@ -154,7 +141,7 @@ describe('controllers', function() {
 
 				scope.logout();
 				expect(localStorage.user).toBeDefined();
-				expect(scope.loginWindowStatus).toBe('hidden');
+				expect(scope.loggedInUser).toBeDefined();
 			});
 		});
 	});

@@ -25,10 +25,6 @@ function socketMock() {
 	this.publishNewMessage = function(message) {
 		this.clientListeningEvents['publishNewMessage'](message);
 	}
-
-	this.userDisconnected = function(user) {
-		this.clientListeningEvents['userDisconnected'](user);
-	}
 }
 
 

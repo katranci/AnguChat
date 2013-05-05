@@ -27,7 +27,7 @@
         </div>
     </div>
 
-    <div id="loginWindowContainer" ng-class="loginWindowStatus">
+    <div id="loginWindowContainer" ng-class="{'visible': !loggedInUser, 'hidden': loggedInUser && !isReturningUser}">
         <div id="loginWindow">
             <form id="loginForm" name="loginForm" ng-submit="login()" novalidate="novalidate">
                 <h1>Welcome to AnguChat!</h1>

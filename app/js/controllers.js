@@ -7,6 +7,8 @@ angular.module('AnguChat.controllers', []).
 
 		$scope.users = [];
 		$scope.messages = [];
+		$scope.loggedInUser;
+		$scope.isReturningUser;
 
 		socket.on('listAllUsers', function(users) {
 			$scope.users = users;
@@ -18,12 +20,6 @@ angular.module('AnguChat.controllers', []).
 
 		socket.on('publishNewMessage', function(message) {
 			$scope.messages.push(message);
-		});
-
-		socket.on('userDisconnected', function(user) {
-			if (user.id == $scope.loggedInUser.id) {
-				$scope.loginWindowStatus = 'visible';
-			}
 		});
 
 		$scope.sendNewMessage = function() {
@@ -44,6 +40,7 @@ angular.module('AnguChat.controllers', []).
 			
 			$scope.loggedInUser = {id: Date.now(), nickname: $scope.nickname};
 			localStorage.user = JSON.stringify($scope.loggedInUser);
+			$scope.isReturningUser = false;
 			
 			$scope.messages.push({
 				time: Date.now(),
@@ -51,8 +48,6 @@ angular.module('AnguChat.controllers', []).
 				text: 'Welcome to AnguChat ' + $scope.loggedInUser.nickname + '!'});
 
 			socket.emit('newUser', $scope.loggedInUser);
-
-			$scope.loginWindowStatus = 'hidden';
 		}
 
 		$scope.logout = function() {
@@ -67,14 +62,15 @@ angular.module('AnguChat.controllers', []).
 				$scope.users = upToDateUsers;
 
 				delete localStorage.user;
+				delete $scope.loggedInUser;
 				
 				socket.disconnect();
-				$scope.loginWindowStatus = 'visible';
 			}
 		}
 
 		if (localStorage.user) {
 			$scope.loggedInUser = JSON.parse(localStorage.user);
+			$scope.isReturningUser = true;
 
 			socket.emit('existingUser', $scope.loggedInUser);
 
@@ -82,7 +78,5 @@ angular.module('AnguChat.controllers', []).
 				time: Date.now(),
 				sender: 'bot',
 				text: 'Welcome back ' + $scope.loggedInUser.nickname + '!'});
-		} else {
-			$scope.loginWindowStatus = 'visible';
 		}
 	}]);
