@@ -1,6 +1,6 @@
 'use strict';
 
-/* http://docs.angularjs.org/guide/dev_guide.e2e-testing */
+
 describe('AnguChat', function() {
   
   describe('New user', function() {
@@ -47,9 +47,16 @@ describe('AnguChat', function() {
         expect(element('#usersWindow li[is-logged-in-user="true"] a.logout').count()).toBe(1);
     });
 
-    xit('should be able to logout', function() {
-        element('#usersWindow li[is-logged-in-user="true"] a.logout').click();
-        // How can I interact with the confirm dialog here?
+    it('should be able to logout', function() {
+      confirmOK();
+      element('#usersWindow li[is-logged-in-user="true"] a.logout').click();
+      expect(element('#usersWindow li[is-logged-in-user="true"]').count()).toBe(0);
+    });
+
+    it('shouldn\'t be logged out if he pressed the cancel button', function() {
+      confirmCancel();
+      element('#usersWindow li[is-logged-in-user="true"] a.logout').click();
+      expect(element('#usersWindow li[is-logged-in-user="true"]').count()).toBe(1);
     });
   });
 });
